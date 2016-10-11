@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <style media="screen">
+            *{margin: 0; padding: 0;}
+            @keyframes test {
+                from{left: 0;}
+                to{left:-113px;}
+            }
+            .box{width:113px; height:400px; margin:100px auto; border:1px solid #000; position:relative; overflow:hidden;}
+.box div{ position:absolute; top:0; left:0; width:400px; height:400px; background:-webkit-repeating-linear-gradient(-45deg,red 0px, red 10px,#fff 10px, #fff 20px, blue 20px, blue 30px, #fff 30px ,#fff 40px);
+            -webkit-animation:test 1s linear infinite;
+              }
+        </style>
+    </head>
+    <body>
+        <div class="box">
+            <div class="">
+
+            </div>
+        </div>
+    </body>
+</html>
