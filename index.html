@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>document</title>
+<style>
+	*{
+		padding:0;
+		margin:0;
+	}
+	html,body{
+		overflow: hidden;
+	}
+	canvas{
+		background: #000;
+		border:1px solid #000;
+	}
+	span{
+		color:#ccc;
+	}
+</style>
+<script>
+function rnd(n,m){
+	return parseInt(Math.random()*(m-n)+n);
+}
+window.onload=function(){
+	var oC=document.getElementById('c1');
+	// 设置宽高
+	var W=document.documentElement.clientWidth;
+	var H=document.documentElement.clientHeight;
+	oC.width=W;
+	oC.height=H;
+	//存线
+	var arrLine=[
+		/*[
+			{x:10,y:10}....
+		],
+		[],
+		[]*/
+	];
+	var N=5;
+	//存点
+	var arrPoint=[];
+	for(var i=0; i<N; i++){
+		var point={
+			x:rnd(0,W),
+			y:rnd(0,H),
+			width:1,
+			height:1,
+			speedX:rnd(-20,20),
+			speedY:rnd(-20,20),
+		}
+		arrPoint.push(point);
+	}
+	//获取画笔
+	var gd=oC.getContext('2d');
+
+
+	setInterval(function(){
+		gd.clearRect(0,0,W,H);
+		//检测每一个点的坐标
+		for(var i=0; i<arrPoint.length; i++){
+			if(arrPoint[i].x>=W || arrPoint[i].x<=0){
+				arrPoint[i].speedX*=-1;
+			}
+			if(arrPoint[i].y>=H || arrPoint[i].y<=0){
+				arrPoint[i].speedY*=-1;
+			}
+			arrPoint[i].x+=arrPoint[i].speedX;
+			arrPoint[i].y+=arrPoint[i].speedY;
+		}
+		//画线
+		dragLine();
+		drawP();
+		drawTail();
+	}, 16)
+
+	function drawP(){
+		gd.fillStyle='#fff';
+		//存尾巴
+		var arr=[];
+		for(var i=0; i<arrPoint.length; i++){
+			gd.fillRect(arrPoint[i].x,arrPoint[i].y,arrPoint[i].width,arrPoint[i].height);
+			arr[i]={x:arrPoint[i].x,y:arrPoint[i].y};
+		}
+		if(arrLine.length>=40){
+			arrLine.shift();
+		}
+		arrLine.push(arr);
+	}
+	function dragLine(){
+		gd.beginPath();
+		gd.strokeStyle='#fff';
+		gd.moveTo(arrPoint[0].x,arrPoint[0].y);
+		for(var i=1; i<arrPoint.length; i++){
+			gd.lineTo(arrPoint[i].x,arrPoint[i].y)
+		}
+		gd.closePath();
+		gd.stroke();
+	};
+	function drawTail(){
+		for(var i=0; i<arrLine.length; i++){
+			gd.beginPath();
+			gd.strokeStyle='rgba('+rnd(0,256)+','+rnd(0,256)+','+rnd(0,256)+','+i/arrLine.length+')';
+			for(var j=0; j<arrLine[i].length; j++){
+				gd.lineTo(arrLine[i][j].x,arrLine[i][j].y);
+			}
+			gd.closePath();
+			gd.stroke();
+		}
+	}
+};
+</script>
+</head>
+<body>
+<canvas id="c1">
+	<span>你的浏览器不支持canvas，
+	<a href="下载的链接">点击下载</a></span>
+</canvas>
+</body>
+</html>
